@@ -15,7 +15,6 @@ public class FlightController : MonoBehaviour
         rb.freezeRotation = true;
     }
 
-    // YENİ EKLENEN KISIM: Input'ları hocanın istediği gibi Update içine alıyoruz
     void Update()
     {
         HandleRotation();
@@ -23,8 +22,10 @@ public class FlightController : MonoBehaviour
 
     private void HandleRotation()
     {
-        // Pitch (Aşağı/Yukarı): Hocanın ödevde özellikle istediği Vector3.right ve transform.Rotate kullanımı
         float pitchInput = Input.GetAxis("Vertical"); 
         transform.Rotate(Vector3.right * pitchInput * pitchSpeed * Time.deltaTime);
+
+        float yawInput = Input.GetAxis("Horizontal"); 
+        transform.Rotate(Vector3.up * yawInput * yawSpeed * Time.deltaTime);
     }
 }
