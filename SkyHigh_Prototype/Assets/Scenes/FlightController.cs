@@ -8,16 +8,19 @@ public class FlightController : MonoBehaviour
     [SerializeField] private float thrustSpeed = 5f;
 
     private Rigidbody rb;
+    private AudioSource audioSource;
 
     void Start()
     {
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
     {
         HandleRotation();
+        HandleThrust();
     }
 
     private void HandleRotation()
@@ -32,5 +35,25 @@ public class FlightController : MonoBehaviour
         if (Input.GetKey(KeyCode.Q)) rollInput = 1f;
         if (Input.GetKey(KeyCode.E)) rollInput = -1f;
         transform.Rotate(Vector3.forward * rollInput * rollSpeed * Time.deltaTime);
+    }
+
+    private void HandleThrust()
+    {
+        if (Input.GetKey(KeyCode.Space))
+        {
+            transform.Translate(Vector3.forward * thrustSpeed * Time.deltaTime);
+            
+            if (!audioSource.isPlaying)
+            {
+                audioSource.Play();
+            }
+        }
+        else
+        {
+            if (audioSource.isPlaying)
+            {
+                audioSource.Stop();
+            }
+        }
     }
 }
