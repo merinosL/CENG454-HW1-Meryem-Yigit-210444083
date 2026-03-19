@@ -7,52 +7,67 @@ public class FlightController : MonoBehaviour
     [SerializeField] private float rollSpeed = 45f;
     [SerializeField] private float thrustSpeed = 5f;
 
-    private Rigidbody rb;
-    private AudioSource audioSource;
+    private Rigidbody _rb;
+    private AudioSource engineAudio;
 
     void Start()
     {
-        rb = GetComponent<Rigidbody>();
-        rb.freezeRotation = true;
-        audioSource = GetComponent<AudioSource>();
+        _rb = GetComponent<Rigidbody>();
+        engineAudio = GetComponent<AudioSource>();
+
+        if (_rb != null)
+        {
+            _rb.freezeRotation = true;
+        }
     }
 
     void Update()
     {
-        HandleRotation();
-        HandleThrust();
+        HandleRotationStuff();
+        HandleThrust(); 
     }
 
-    private void HandleRotation()
+    private void HandleRotationStuff()
     {
-        float pitchInput = Input.GetAxis("Vertical"); 
-        transform.Rotate(Vector3.right * pitchInput * pitchSpeed * Time.deltaTime);
+        float pitch = Input.GetAxis("Vertical");
+        float yaw = Input.GetAxis("Horizontal");
 
-        float yawInput = Input.GetAxis("Horizontal"); 
-        transform.Rotate(Vector3.up * yawInput * yawSpeed * Time.deltaTime);
+        transform.Rotate(Vector3.right * pitch * pitchSpeed * Time.deltaTime);
+        transform.Rotate(Vector3.up * yaw * yawSpeed * Time.deltaTime);
 
-        float rollInput = 0f;
-        if (Input.GetKey(KeyCode.Q)) rollInput = 1f;
-        if (Input.GetKey(KeyCode.E)) rollInput = -1f;
-        transform.Rotate(Vector3.forward * rollInput * rollSpeed * Time.deltaTime);
+        float roll = 0f;
+
+        if (Input.GetKey(KeyCode.Q))
+        {
+            roll = 1f;
+        }
+        else if (Input.GetKey(KeyCode.E))
+        {
+            roll = -1f;
+        }
+
+        transform.Rotate(Vector3.forward * roll * rollSpeed * Time.deltaTime);
     }
 
     private void HandleThrust()
     {
-        if (Input.GetKey(KeyCode.Space))
+        bool pressingSpace = Input.GetKey(KeyCode.Space);
+
+        if (pressingSpace)
         {
-            transform.Translate(Vector3.forward * thrustSpeed * Time.deltaTime);
-            
-            if (!audioSource.isPlaying)
+            Vector3 forwardMove = Vector3.forward * thrustSpeed * Time.deltaTime;
+            transform.Translate(forwardMove);
+
+            if (engineAudio != null && !engineAudio.isPlaying)
             {
-                audioSource.Play();
+                engineAudio.Play();
             }
         }
         else
         {
-            if (audioSource.isPlaying)
+            if (engineAudio != null && engineAudio.isPlaying)
             {
-                audioSource.Stop();
+                engineAudio.Stop();
             }
         }
     }

@@ -584,9 +584,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ca517dabac2754fddb2536c646c07a28, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FlightController
-  pitchSpeed: 45
-  yawSpeed: 45
-  rollSpeed: 45
+  pitchSpeed: 25
+  yawSpeed: 25
+  rollSpeed: 25
   thrustSpeed: 5
 --- !u!65 &1605907504
 BoxCollider:
